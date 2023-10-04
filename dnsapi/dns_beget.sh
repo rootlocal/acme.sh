@@ -24,6 +24,18 @@ api="https://api.beget.com/api/dns"
 dns_beget_add() {
     fulldomain=$1
     txtvalue=$2
+
+    BEGET_LOGIN="${BEGET_LOGIN:-$(_readaccountconf_mutable BEGET_LOGIN)}"
+    BEGET_PASSWORD="${BEGET_PASSWORD:-$(_readaccountconf_mutable BEGET_PASSWORD)}"
+
+    if [ -z "${BEGET_LOGIN}" ] || [ -z "${BEGET_PASSWORD}" ]; then
+        _err "You don't specify beget password or username."
+        return 1
+    fi
+
+    _saveaccountconf_mutable BEGET_LOGIN "${BEGET_LOGIN}"
+    _saveaccountconf_mutable BEGET_PASSWORD "${BEGET_PASSWORD}"
+
     curData="{\"fqdn\":\"${fulldomain}\",\"records\":{\"TXT\":[{\"value\": \"${txtvalue}\"}]}}"
     _info "Adding record ${fulldomain} value: ${txtvalue}"
 
@@ -40,6 +52,20 @@ dns_beget_add() {
 
 dns_beget_rm() {
     #fulldomain=$1
+    #txtvalue=$2
     #_info "Deletet txt record ${fulldomain}"
+    
+    BEGET_LOGIN="${BEGET_LOGIN:-$(_readaccountconf_mutable BEGET_LOGIN)}"
+    BEGET_PASSWORD="${BEGET_PASSWORD:-$(_readaccountconf_mutable BEGET_PASSWORD)}"
+
+    if [ -z "${BEGET_LOGIN}" ] || [ -z "${BEGET_PASSWORD}" ]; then
+        _err "You don't specify beget password or username."
+        return 1
+    fi
+
+    _saveaccountconf_mutable BEGET_LOGIN "${BEGET_LOGIN}"
+    _saveaccountconf_mutable BEGET_PASSWORD "${BEGET_PASSWORD}"
+
+
     return 0
 }
